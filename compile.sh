@@ -22,12 +22,19 @@ function include() {
     jq "$JQ" ~/.factorio/mods/mod-list.json~ > ~/.factorio/mods/mod-list.json
 }
 
+function exclude() {
+    local JQ="del(.mods[] | select(.name == \"$NAME\"))"
+    cp ~/.factorio/mods/mod-list.json ~/.factorio/mods/mod-list.json~
+    jq "$JQ" ~/.factorio/mods/mod-list.json~ > ~/.factorio/mods/mod-list.json
+}
+
 function clean() {
     rm -rf ${NAME}_*
 }
 
 function uninstall() {
     rm -rf ~/.factorio/mods/${NAME}_*
+    exclude
 }
 
 function inspect() {
