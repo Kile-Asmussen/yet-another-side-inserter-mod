@@ -7,7 +7,9 @@ NAME_VERSION="${NAME}_${VERSION}"
 rm -f $NAME_VERSION.zip
 rm -rf $NAME_VERSION
 
-git archive --worktree-attributes HEAD --prefix=$NAME_VERSION/ -o $NAME_VERSION.zip
+if [[ $* != *clean* ]]; then
+    git archive --worktree-attributes HEAD --prefix=$NAME_VERSION/ -o $NAME_VERSION.zip
+fi
 
 if [[ $* == *install* ]]; then
     cp -f  $NAME_VERSION.zip ~/.factorio/mods/

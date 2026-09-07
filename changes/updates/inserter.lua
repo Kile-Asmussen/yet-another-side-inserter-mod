@@ -1,7 +1,5 @@
 
 local util = require 'util'
-local fac = require 'fac'
-local lib = require 'lib'
 
 for _, inserter in pairs(data.raw.inserter) do
     
