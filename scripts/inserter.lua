@@ -133,7 +133,7 @@ end
 
 local function get_inserter_prototype(inserter)
     if inserter.type == 'inserter' then return inserter.prototype end
-    if inserter.type == 'entity-ghost' and ghost_type == 'inserter' then return inserter.ghost_prototype end
+    if inserter.type == 'entity-ghost' and inserter.ghost_type == 'inserter' then return inserter.ghost_prototype end
 end
 
 local function locate_inserter(callback, ...)

@@ -20,5 +20,5 @@ if [[ $* == *unzip* ]] then
 fi
 
 if [[ $* == *uninstall* ]]; then
-    rm -f ~/.factorio/mods/$NAME_VERSION.zip
+    rm -f ~/.factorio/mods/${NAME}_*.*.*.zip
 fi
