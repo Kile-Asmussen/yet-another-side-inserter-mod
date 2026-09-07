@@ -1,5 +1,4 @@
 
-local lib = require 'lib'
 local util = require 'util'
 local math2d = require 'math2d'
 
