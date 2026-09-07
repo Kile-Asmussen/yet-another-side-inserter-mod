@@ -4,10 +4,10 @@ local yasilib = {}
 local util = require 'util'
 local math2d = require 'math2d'
 
-yasilib.number_of_directions = table_size(defines.direction)
+yasilib.number_of_directions = table_size(defines.directions)
 
 function yasilib.add_direction(direction, turn)
-    return (direction + turn) % number_of_directions
+    return (direction + turn) % yasilib.number_of_directions
 end
 
 function yasilib.ortho_or_diagonal(direction)
@@ -32,7 +32,7 @@ yasilib.normalised_direction_vectors = {}
 
 for _, dir in pairs{ 'north', 'northeast', 'east', 'southeast', 'south', 'southwest', 'west', 'northwest' } do
     dir = defines.direction[dir]
-    yasilib.normalised_direction_vectors[dir] = math2d.position.get_normalised(util.normalised_direction_vectors[dir])
+    yasilib.normalised_direction_vectors[dir] = math2d.position.get_normalised(util.direction_vectors[dir])
 end
 
 
@@ -161,7 +161,7 @@ function yasilib.locate_inserter(event)
     if prototype then return entity, prototype end
 end
 
-setmetatable(lib, {
+setmetatable(yasilib, {
     __tostring = function() return 'yasilib' end,
     __index = function(_, k) error('no such key yasilib.' .. k) end,
     __newindex = function(_, k) error('no such key yasilib.' .. k) end,
