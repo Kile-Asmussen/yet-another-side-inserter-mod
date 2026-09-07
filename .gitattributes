@@ -1,0 +1,10 @@
+*.png binary
+
+compile.sh export-ignore
+
+.envrc export-ignore
+.githooks export-ignore
+.githooks/* export-ignore
+.githooks/** export-ignore
+
+flake.nix export-ignore

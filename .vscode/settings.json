@@ -1,0 +1,20 @@
+{
+    "[lua]": {
+        "files.autoSave": "afterDelay",
+        "files.autoSaveDelay": 1000
+    },
+    "files.associations": {
+        "*.cfg": "plaintext"
+    },
+    "python.analysis.typeCheckingMode": "standard",
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false,
+    "explorer.fileNesting.patterns": {
+        "*.lua": "${capture}-updates.lua, ${capture}-final-fixes.lua",
+        ".envrc": "flake.nix, flake.lock",
+        "info.json": "changelog.txt, thumbnail.png",
+        "README.md": "LICENSE",
+        ".gitignore": ".gitattributes",
+    },
+    "explorer.sortOrder": "mixed",
+}

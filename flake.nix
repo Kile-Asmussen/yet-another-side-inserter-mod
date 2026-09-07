@@ -29,12 +29,11 @@
               #
               # See also: nixpkgs#5131 nixpkgs#6091
               export SHELL=${pkgs.bashInteractive}/bin/bash
-              alias jq=jaq
             '';
 
             packages = with pkgs; [
               lua
-              jaq
+              jq
             ];
           };
       }
