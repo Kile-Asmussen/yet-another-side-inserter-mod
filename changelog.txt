@@ -1,0 +1,66 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.10.0
+Date: 2026-09-07
+  Balancing:
+    - Inserter recipe reverted to vanilla for Logistic Science compatibility (even though arguably a direct-insertion build with the burner inserter as an intermediate step is easier to design.).
+    - Long-handed inserter recipe made more expensive, same raw materials as vanilla:
+      - 2 × iron plate
+      - 2 × iron gear wheel
+      - 1 × electronic circuit
+  Info:
+    - Full changelog added.
+---------------------------------------------------------------------------------------------------
+Version: 0.9.1
+Date: 2026-09-07
+  Bugfixes:
+    - Fixed a bug in the on_player_rotated_entity hook which failed to check whether a ghost had LuaEntity::ghost_type == "inserter", causing a crash when the player rotated a non-inserter ghost.
+  Info:
+    - Bugged version 0.9.0 removed from downloads.
+---------------------------------------------------------------------------------------------------
+Version: 0.9.0
+Date: 2026-09-07
+  Major Features:
+    - Inserters can now be rotated like 8-directional entities (flamethrower turrets, railgun turrets) with the ordinary rotate key, even after placing (not normally possible with 8-directional entities.) The inserter will be rotated when the drop-off point would be 90° offset from the back of the inserter (the single-leg side.)
+    - Inserter pick-up offsset can be independently adjusted of the drop-off offset, in 8 directions.
+    - All inserters above long-handed inserters can be configured to have one of four different reach-distances.
+      - The four reach levels are: normal reach, drop on near lane; normal reach, drop on far lane; long-handed reach, drop on near lane; long-handed reach, drop on far lane.
+    - When pasting entity settings to an inserter, a player setting dictates whether pick-up and drop-off offsets are pasted or not.
+      - A hotkey is provided to quickly change this while in-game.
+    - Command /yasi-fix-inserters introduced which attempts to convert existing inserters' pick-up and drop-off positions to the 8-direction/4-reach system of YASI.
+  Control:
+    - Default keybindings:
+      - ALT + mouse wheel up      extend inserter arm reach by 1 step.
+      - ALT + mouse wheel down    retract inserter arm reach by 1 step.
+      - CONTROL + R               rotate inserter pickup position counter-clockwise.
+      - CONTROL + SHIFT + R       rotate inserter pickup position counter-clockwise.
+      - ALT + mouse wheel click   reset inserter to default pick-up/drop-off offsets.
+      - ALT + SHIFT + P           hotkey to toggle the pasting behavior setting.
+    - Commands:
+      - /yasi-fix-inserters :: for the player's current surface, locate all inserters and bring them in line with YASI's model of inserter configuration.
+  Balancing:
+    - Inserter recipe changed:
+      - 1 × burner inserter
+      - 1 × electronic circuit
+    - Long-handed inserter recipe changed:
+      - 2 × iron plate
+      - 1 × iron gear wheel
+      - 1 × electronic circuit
+    - Fast inserter recipe changed:
+      - 1 × long-handed inserter
+      - 1 × steel plate
+      - 1 × eletronic circuit
+    - Fast inserter technology now requires Steel processing and Automation 1.
+    - Adjusted the rotation and extension speeds of regular inserter and burner inserter (small buff.) 
+    - Electric inserters now have a small energy buffer, roughly large enough for 3-5 full swings of the hand.
+      - The basic inserter no longer has any passive power drain.
+    - When dropping off items onto a belt diagonally, the inserter arms are not long enough to reach the far lane of a distant belt.
+      - This is done primarily to avoid visual issues, (stretching the inserter arm by 140%,) but also presents and interesting and realistic limtation for the player to work around.
+  Modding:
+    - Data-Updates stage:
+      - InserterPrototype::burner_leech and InserterPrototype::support_custom
+      - Inserters with an InserterPrototype::energy_source of type='electric' will automatically be given an internal buffer of computed size.
+      - Inserters with an InserterPrototype::extension_speed ≥ 0.05 will be given hand_size=1.6 and support four levels of arm reach; below that cutoff, hand_size=0.85 and only the first two reach levels are supported.
+  Compatibility:
+    - All internal names in this mod are prefixed with 'yasi-' to avoid namespace collissions.
+    - The inserters are not true 8-directional entities in that they are not given the "building-direction-8-way" flag (this causes them to become non-rotatable after placement.) The rotation behavior is accomplished with an on_player_rotated_entity event hook, which does not have support for inserter entities with non-square bases.
+      - Actual compatibility behavior with mods such as Inserter Cranes has not been tested.

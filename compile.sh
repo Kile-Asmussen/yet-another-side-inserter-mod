@@ -4,8 +4,7 @@ VERSION=$(jq -r '.version' < info.json)
 NAME=$(jq -r '.name' < info.json)
 NAME_VERSION="${NAME}_${VERSION}"
 
-rm -f $NAME_VERSION.zip
-rm -rf $NAME_VERSION
+rm -f ${NAME}_*.*.*.zip
 
 if [[ $* != *clean* ]] && [[ $* != *uninstall* ]]; then
     git archive --worktree-attributes HEAD --prefix=$NAME_VERSION/ -o $NAME_VERSION.zip &> /dev/null

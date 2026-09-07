@@ -8,15 +8,10 @@ data.raw.inserter.inserter.energy_source.drain = nil
 
 if not settings.startup['yasi-vanilla-recipes'].value then
 
-    data.raw.recipe.inserter.ingredients = {
-        { type = 'item', name = 'burner-inserter', amount = 1 },
-        { type = 'item', name = 'electronic-circuit', amount = 1 },
-    }
-
     data.raw.recipe['long-handed-inserter'].ingredients = {
         { type = 'item', name = 'iron-plate', amount = 2 },
-        { type = 'item', name = 'iron-gear-wheel', amount = 1 },
-        { type = 'item', name = 'electronic-circuit', amount = 1 },
+        { type = 'item', name = 'iron-gear-wheel', amount = 2 },
+        { type = 'item', name = 'electronic-circuit', amount = 2 },
     }
 
     data.raw.recipe['fast-inserter'].ingredients = {
