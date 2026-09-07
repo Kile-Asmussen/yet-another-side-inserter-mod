@@ -9,20 +9,22 @@ script.on_event('yasi-reset-inserter-arm', function(event)
 end)
 
 script.on_event('yasi-extend-inserter-arm', function(event)
-    yasilib.adjust_inserter_extension(yasilib.locate_inserter(event), 1)
+    yasilib.adjust_inserter_extension(1, yasilib.locate_inserter(event))
 end)
 
 script.on_event('yasi-retract-inserter-arm', function(event)
-    yasilib.adjust_inserter_extension(yasilib.locate_inserter(event), -1)
+    yasilib.adjust_inserter_extension(-1, yasilib.locate_inserter(event))
 end)
 
 script.on_event('yasi-rotate-inserter-pickup-sunwise', function(event)
+    local player = game.get_player(event.player_index)
     local turn = defines.direction.northeast
     if not player.mod_settings['yasi-8-way-rotation'].value then turn = defines.direction.east end
     yasilib.rotate_inserter_pickup(turn, yasilib.locate_inserter(event))
 end)
 
 script.on_event('yasi-rotate-inserter-pickup-widdershins', function(event)
+    local player = game.get_player(event.player_index)
     local turn = defines.direction.northwest
     if not player.mod_settings['yasi-8-way-rotation'].value then turn = defines.direction.west end
     yasilib.rotate_inserter_pickup(turn, yasilib.locate_inserter(event))
@@ -81,18 +83,17 @@ script.on_event(defines.events.on_player_rotated_entity, function(event)
     local inserter = event.entity
     local prototype = yasilib.get_inserter_prototype(inserter)
     if not prototype then return end
+
     local turn = defines.direction.northwest
     if yasilib.add_direction(event.previous_direction, defines.direction.east) == inserter.direction then
         turn = defines.direction.northeast
     end
     inserter.direction = event.previous_direction
-    yasilib.rotate_inserter(inserter, yasilib.get_inserter_prototype(inserter), turn)
+    yasilib.rotate_inserter(turn, inserter, prototype)
 end)
 
 commands.add_command('yasi-fix-inserters', {'command.yasi-fix-inserters'}, function(command)
-    for i = 1, #game.surfaces do
-        local surface = game.surfaces[i]
-
+    for _, surface in pairs(game.surfaces) do
         local inserters = surface.find_entities_filtered{
             type = 'inserter'
         }

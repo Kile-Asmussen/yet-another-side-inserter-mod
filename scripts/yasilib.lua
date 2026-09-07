@@ -48,7 +48,7 @@ function yasilib.get_pickup_offset(inserter)
 end
 
 function yasilib.vector_to_direction(vector)
-    local length = math.sqrt(dot_product(vector, vector))
+    local length = math.sqrt(yasilib.dot_product(vector, vector))
     local min = length - 0.001
     local max = length + 0.001
     for dir, normal in pairs(yasilib.normalised_direction_vectors) do
@@ -135,7 +135,7 @@ function yasilib.rotate_inserter(turn, inserter, prototype)
     local pickup_direction = yasilib.add_direction(yasilib.get_pickup_direction(inserter), turn)
     local drop_direction = yasilib.add_direction(yasilib.get_drop_direction(inserter), turn)
 
-    if cardinals[drop_direction] then inserter.direction = util.oppositedirection(drop_direction) end
+    if yasilib.cardinals[drop_direction] then inserter.direction = util.oppositedirection(drop_direction) end
 
     yasilib.set_pickup(inserter, pickup_direction, nil)
     yasilib.set_drop(inserter, drop_direction, nil)
@@ -155,9 +155,9 @@ end
 function yasilib.locate_inserter(event)
     local player = game.get_player(event.player_index)
 
-    if not player.selected then return end
-    
     local entity = player.selected
+
+    if not entity then return end
 
     local prototype = yasilib.get_inserter_prototype(entity)
 
