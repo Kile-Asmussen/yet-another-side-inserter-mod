@@ -48,7 +48,7 @@ Date: 2026-09-07
     - Fast inserter recipe changed:
       - 1 × long-handed inserter
       - 1 × steel plate
-      - 1 × eletronic circuit
+      - 1 × electronic circuit
     - Fast inserter technology now requires Steel processing and Automation 1.
     - Adjusted the rotation and extension speeds of regular inserter and burner inserter (small buff.) 
     - Electric inserters now have a small energy buffer, roughly large enough for 3-5 full swings of the hand.
