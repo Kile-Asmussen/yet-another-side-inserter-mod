@@ -2,5 +2,6 @@
 
 VERSION=$(jq -r '.version' < info.json)
 NAME=$(jq -r '.name' < info.json)
+NAME_VERSION="${NAME}_${VERSION}"
 
-git archive --worktree-attributes HEAD -o "${NAME}_${VERSION}.zip"
+git archive --worktree-attributes HEAD --prefix=$NAME_VERSION/ -o $NAME_VERSION.zip

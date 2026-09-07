@@ -1,8 +1,8 @@
 
 data.raw.inserter.inserter.rotation_speed = 0.015
 data.raw.inserter.inserter.extension_speed = 0.04
-data.raw.inserter.burner_inserter.rotation_speed = 0.015
-data.raw.inserter.burner_inserter.extension_speed = 0.04
+data.raw.inserter['burner-inserter'].rotation_speed = 0.015
+data.raw.inserter['burner-inserter'].extension_speed = 0.04
 
 data.raw.inserter.inserter.energy_source.drain = nil
 
