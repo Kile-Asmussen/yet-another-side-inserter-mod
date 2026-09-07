@@ -4,9 +4,7 @@ Date: 2026-09-07
   Balancing:
     - Inserter recipe reverted to vanilla for Logistic Science compatibility (even though arguably a direct-insertion build with the burner inserter as an intermediate step is easier to design.).
     - Long-handed inserter recipe made more expensive, same raw materials as vanilla:
-      - 2 × iron plate
-      - 2 × iron gear wheel
-      - 1 × electronic circuit
+      - 2 × iron plate, 2 × iron gear wheel, 1 × electronic circuit
   Control:
     - Introduced per-player setting to disable the 45⁰ rotation steps, if needed.
   Modding:
@@ -44,16 +42,11 @@ Date: 2026-09-07
       - /yasi-fix-inserters :: for the player's current surface, locate all inserters and bring them in line with YASI's model of inserter configuration.
   Balancing:
     - Inserter recipe changed:
-      - 1 × burner inserter
-      - 1 × electronic circuit
+      - 1 × burner inserter, 1 × electronic circuit
     - Long-handed inserter recipe changed:
-      - 2 × iron plate
-      - 1 × iron gear wheel
-      - 1 × electronic circuit
+      - 2 × iron plate, 1 × iron gear wheel, 1 × electronic circuit
     - Fast inserter recipe changed:
-      - 1 × long-handed inserter
-      - 1 × steel plate
-      - 1 × electronic circuit
+      - 1 × long-handed inserter, 1 × steel plate, 1 × electronic circuit
     - Fast inserter technology now requires Steel processing and Automation 1.
     - Recipe and technology changes can be disabled via a startup setting.
     - Adjusted the rotation and extension speeds of regular inserter and burner inserter (small buff.) 

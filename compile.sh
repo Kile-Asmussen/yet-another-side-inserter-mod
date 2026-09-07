@@ -12,9 +12,14 @@ function compile() {
     git gc --prune=now &> /dev/null
 }
 
+function restore-list() {
+    mv ~/.factorio/mods/mod-list.json~ ~/.factorio/mods/mod-list.json
+}
+
 function include() {
     local JQ="if any(.mods[]; .name == \"$NAME\") then . else .mods += [{ name: \"$NAME\", enabled: true }] end"
-    jq "$JQ" ~/.factorio/mods/mod-list.json
+    cp ~/.factorio/mods/mod-list.json ~/.factorio/mods/mod-list.json~
+    jq "$JQ" ~/.factorio/mods/mod-list.json~ > ~/.factorio/mods/mod-list.json
 }
 
 function clean() {
