@@ -10,6 +10,7 @@ Date: 2026-09-07
   Modding:
     - Exposed internal functions as a library:
       - local yasilib = require '__yasi-inserter-love__.scripts.yasilib'
+    - The InserterPrototype::hand_size of inserters is now set to 0.75 or 1.5, (0.1 less than in 0.9.1).
   Info:
     - Full changelog added.
 ---------------------------------------------------------------------------------------------------
