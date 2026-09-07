@@ -20,7 +20,7 @@ function uninstall() {
     rm -rf ~/.factorio/mods/${NAME}_*
 }
 
-function files() {
+function inspect() {
     if [[ ! -f $NAME_VERSION.zip ]]; then compile; fi
     unzip -o $NAME_VERSION.zip &> /dev/null
 }
@@ -33,15 +33,15 @@ function install() {
 
 function link() {
     uninstall
-    files
-    rm -f $NAME_VERSION.zip
-    ln -s ./$NAME_VERSION/ ~/.factorio/mods/$NAME_VERSION
-}
-
-function link() {
-    uninstall
-    files
-    ln -s ./$NAME_VERSION/ ~/.factorio/mods/$NAME_VERSION
+    mkdir -p ~/.factorio/mods/$NAME_VERSION/
+    for file in $(
+        git ls-files \
+        | git check-attr --stdin export-ignore \
+        | rg -e '^([^:]+):.*unspecified' -r "\$1"
+    ); do
+        mkdir -p $(dirname ~/.factorio/mods/$NAME_VERSION/$file)
+        ln ./$file ~/.factorio/mods/$NAME_VERSION/$file
+    done
 }
 
 for arg in $@; do

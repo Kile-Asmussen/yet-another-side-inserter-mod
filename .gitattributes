@@ -4,4 +4,5 @@ compile.sh export-ignore
 flake.nix export-ignore
 .* export-ignore
 .*/* export-ignore
+.*/**/* export-ignore
 *_*.*.* export-ignore
