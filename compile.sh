@@ -8,7 +8,7 @@ rm -f ${NAME}_*.*.*.zip
 
 function compile() {
     git add --all
-    git archive --worktree-attributes $(git stash create) --prefix=$NAME_VERSION/ -o $NAME_VERSION.zip &> /dev/null
+    git archive --worktree-attributes $(git stash create) --prefix=$NAME_VERSION/ -o $NAME_VERSION.zip &>/dev/null
     git gc --prune=now &> /dev/null
 }
 
