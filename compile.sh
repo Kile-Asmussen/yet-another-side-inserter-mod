@@ -12,6 +12,11 @@ function compile() {
     git gc --prune=now &> /dev/null
 }
 
+function include() {
+    local JQ="if any(.mods[]; .name == \"$NAME\") then . else .mods += [{ name: \"$NAME\", enabled: true }] end"
+    jq "$JQ" ~/.factorio/mods/mod-list.json
+}
+
 function clean() {
     rm -rf ${NAME}_*
 }
@@ -29,6 +34,7 @@ function install() {
     if [[ ! -f $NAME_VERSION.zip ]]; then compile; fi
     uninstall
     cp -f $NAME_VERSION.zip ~/.factorio/mods/
+    include
 }
 
 function link() {
@@ -42,6 +48,7 @@ function link() {
         mkdir -p $(dirname ~/.factorio/mods/$NAME_VERSION/$file)
         ln ./$file ~/.factorio/mods/$NAME_VERSION/$file
     done
+    include
 }
 
 for arg in $@; do
