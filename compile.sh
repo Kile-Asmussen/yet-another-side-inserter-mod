@@ -16,7 +16,7 @@ if [[ $* == *install* ]] && [[ $* != *uninstall* ]]; then
 fi
 
 if [[ $* == *unzip* ]] then
-    unzip $NAME_VERSION.zip
+    unzip $NAME_VERSION.zip &> /dev/null
 fi
 
 if [[ $* == *uninstall* ]]; then
