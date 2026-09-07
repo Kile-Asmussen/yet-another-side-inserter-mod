@@ -48,7 +48,7 @@ function yasilib.vector_to_direction(vector)
     local length = math.sqrt(dot_product(vector, vector))
     local min = length - 0.001
     local max = length + 0.001
-    for dir, normal in pairs(normalised_direction_vectors) do
+    for dir, normal in pairs(yasilib.normalised_direction_vectors) do
         local proj = yasilib.dot_product(vector, normal)
         if min < proj and proj < max then return dir end
     end
