@@ -4,7 +4,10 @@ local yasilib = {}
 local util = require 'util'
 local math2d = require 'math2d'
 
-yasilib.number_of_directions = table_size(defines.directions)
+yasilib.number_of_directions = table_size(defines.direction)
+
+if not defines.direction then error("defines.direction not found") end
+if not table_size(defines.direction) then error("defines.direction has no table_size") end
 
 function yasilib.add_direction(direction, turn)
     return (direction + turn) % yasilib.number_of_directions

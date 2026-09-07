@@ -7,12 +7,13 @@ NAME_VERSION="${NAME}_${VERSION}"
 rm -f ${NAME}_*.*.*.zip
 
 function compile() {
+    git add --all
     git archive --worktree-attributes $(git stash create) --prefix=$NAME_VERSION/ -o $NAME_VERSION.zip &> /dev/null
     git gc --prune=now &> /dev/null
 }
 
 function clean() {
-    rm -f ${NAME}_*
+    rm -rf ${NAME}_*
 }
 
 function uninstall() {
@@ -21,7 +22,7 @@ function uninstall() {
 
 function files() {
     if [[ ! -f $NAME_VERSION.zip ]]; then compile; fi
-    unzip $NAME_VERSION.zip &> /dev/null
+    unzip -o $NAME_VERSION.zip &> /dev/null
 }
 
 function install() {
@@ -33,7 +34,14 @@ function install() {
 function link() {
     uninstall
     files
-    ln -s . ~/.factorio/mods/$NAME_VERSION
+    rm -f $NAME_VERSION.zip
+    ln -s ./$NAME_VERSION/ ~/.factorio/mods/$NAME_VERSION
+}
+
+function link() {
+    uninstall
+    files
+    ln -s ./$NAME_VERSION/ ~/.factorio/mods/$NAME_VERSION
 }
 
 for arg in $@; do
