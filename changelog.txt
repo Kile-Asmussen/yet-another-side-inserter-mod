@@ -9,6 +9,9 @@ Date: 2026-09-07
       - 1 × electronic circuit
   Control:
     - Introduced per-player setting to disable the 45⁰ rotation steps, if needed.
+  Modding:
+    - Exposed internal functions as a library:
+      - local yasilib = require '__yasi-inserter-love__.scripts.yasilib'
   Info:
     - Full changelog added.
 ---------------------------------------------------------------------------------------------------

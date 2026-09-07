@@ -19,4 +19,9 @@
         ".gitignore": ".gitattributes",
     },
     "explorer.sortOrder": "mixed",
+    "cSpell.words": [
+        "normalised",
+        "yasi",
+        "yasilib"
+    ],
 }
