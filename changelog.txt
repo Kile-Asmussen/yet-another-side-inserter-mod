@@ -7,6 +7,8 @@ Date: 2026-09-07
       - 2 × iron plate
       - 2 × iron gear wheel
       - 1 × electronic circuit
+  Control:
+    - Introduced per-player setting to disable the 45⁰ rotation steps, if needed.
   Info:
     - Full changelog added.
 ---------------------------------------------------------------------------------------------------
@@ -50,6 +52,7 @@ Date: 2026-09-07
       - 1 × steel plate
       - 1 × electronic circuit
     - Fast inserter technology now requires Steel processing and Automation 1.
+    - Recipe and technology changes can be disabled via a startup setting.
     - Adjusted the rotation and extension speeds of regular inserter and burner inserter (small buff.) 
     - Electric inserters now have a small energy buffer, roughly large enough for 3-5 full swings of the hand.
       - The basic inserter no longer has any passive power drain.

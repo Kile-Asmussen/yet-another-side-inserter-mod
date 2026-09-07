@@ -26,3 +26,7 @@ And two _KILLER FEATURES:_
 - **The Long arm of Logistics:** All inserters above the yellow inserter descend from the long-handed inserter and their reach can be configured on the fly; no need for separate longer inserter variants.
 
 - **One for All:** YASI provides a system to intelligently paste inserter settings, selectively omitting or including the configuration of the pickup and dropoff points. This can both be toggled in the Mod Settings, and with a nifty hotkey! (Useful for pasting filters and circuit conditions while preserving handedness.)
+
+Trivia:
+
+- Did you know that before clocks were commonplace, clockwise was called 'sunwise', and counter/anti-clockwise was called 'widdershins'?

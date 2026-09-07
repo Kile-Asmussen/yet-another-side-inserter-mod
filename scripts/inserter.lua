@@ -90,7 +90,7 @@ local function set_drop(inserter, direction, level)
     inserter.drop_position = math2d.position.add(inserter.position, offset)
 end
 
-local function adjust_inserter_extension(inserter, prototype, adjustment)
+local function adjust_inserter_extension(adjustment, inserter, prototype)
     if not inserter then return end
     local level = get_extension_level(inserter)
     local max = get_max_extension_level(prototype)
@@ -100,7 +100,7 @@ local function adjust_inserter_extension(inserter, prototype, adjustment)
 end
 
 
-local function rotate_inserter_pickup(inserter, prototype, turn)
+local function rotate_inserter_pickup(turn, inserter, prototype)
     if not inserter then return end
     local new_direction = add_direction(get_pickup_direction(inserter), turn)
     set_pickup(inserter, new_direction, nil)
@@ -113,7 +113,7 @@ local cardinals = {
     [defines.direction.west] = true,
 }
 
-local function rotate_inserter(inserter, prototype, turn)
+local function rotate_inserter(turn, inserter, prototype)
     if not inserter then return end
 
     local pickup_direction = add_direction(get_pickup_direction(inserter), turn)
@@ -136,27 +136,41 @@ local function get_inserter_prototype(inserter)
     if inserter.type == 'entity-ghost' and inserter.ghost_type == 'inserter' then return inserter.ghost_prototype end
 end
 
-local function locate_inserter(callback, ...)
-    local args = { ... }
-    return function(event)
-        local player = game.get_player(event.player_index)
+local function locate_inserter(event)
+    local player = game.get_player(event.player_index)
 
-        if not player.selected then return end
-        
-        local entity = player.selected
+    if not player.selected then return end
+    
+    local entity = player.selected
 
-        local prototype = get_inserter_prototype(entity)
+    local prototype = get_inserter_prototype(entity)
 
-        if prototype then callback(entity, prototype, table.unpack(args)) end
-    end
+    if prototype then return entity, prototype end
 end
 
+script.on_event('yasi-reset-inserter-arm', function(event)
+    reset_inserter(locate_inserter(event))
+end)
 
-script.on_event('yasi-reset-inserter-arm', locate_inserter(reset_inserter))
-script.on_event('yasi-extend-inserter-arm', locate_inserter(adjust_inserter_extension, 1))
-script.on_event('yasi-retract-inserter-arm', locate_inserter(adjust_inserter_extension, -1))
-script.on_event('yasi-rotate-inserter-pickup-sunwise', locate_inserter(rotate_inserter_pickup, defines.direction.northeast))
-script.on_event('yasi-rotate-inserter-pickup-widdershins', locate_inserter(rotate_inserter_pickup, defines.direction.northwest))
+script.on_event('yasi-extend-inserter-arm', function(event)
+    adjust_inserter_extension(locate_inserter(event), 1)
+end)
+
+script.on_event('yasi-retract-inserter-arm', function(event)
+    adjust_inserter_extension(locate_inserter(event), -1)
+end)
+
+script.on_event('yasi-rotate-inserter-pickup-sunwise', function(event)
+    local turn = defines.direction.northeast
+    if not player.mod_settings['yasi-8-way-rotation'].value then turn = defines.direction.east end
+    rotate_inserter_pickup(turn, locate_inserter(event))
+end)
+
+script.on_event('yasi-rotate-inserter-pickup-widdershins', function(event)
+    local turn = defines.direction.northwest
+    if not player.mod_settings['yasi-8-way-rotation'].value then turn = defines.direction.west end
+    rotate_inserter_pickup(turn, locate_inserter(event))
+end)
 
 script.on_event('yasi-toggle-paste-inserter-directions', function(event)
     local player = game.get_player(event.player_index)
@@ -205,6 +219,9 @@ script.on_event(defines.events.on_entity_settings_pasted, function(event)
 end)
 
 script.on_event(defines.events.on_player_rotated_entity, function(event)
+    local player = game.get_player(event.player_index)
+    if not player.mod_settings['yasi-8-way-rotation'].value then return end
+
     local inserter = event.entity
     local prototype = get_inserter_prototype(inserter)
     if not prototype then return end

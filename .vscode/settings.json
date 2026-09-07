@@ -1,7 +1,9 @@
 {
     "[lua]": {
         "files.autoSave": "afterDelay",
-        "files.autoSaveDelay": 1000
+        "files.autoSaveDelay": 1000,
+        "editor.wordBasedSuggestions": "off",
+        "editor.inlineSuggest.enabled": false,
     },
     "files.associations": {
         "*.cfg": "plaintext"
