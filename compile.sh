@@ -4,7 +4,6 @@ VERSION=$(jq -r '.version' < info.json)
 NAME=$(jq -r '.name' < info.json)
 NAME_VERSION="${NAME}_${VERSION}"
 
-rm -f ${NAME}_*.*.*.zip
 
 function compile() {
     git add --all

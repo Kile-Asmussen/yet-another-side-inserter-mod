@@ -22,4 +22,6 @@ if not settings.startup['yasi-vanilla-recipes'].value then
 
 end
 
+data.raw.inserter['fast-inserter'].fast_replaceable_group = 'inserter'
+
 data.raw.technology['fast-inserter'].prerequisites = { 'automation', 'steel-processing' }

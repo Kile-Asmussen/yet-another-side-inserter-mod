@@ -11,7 +11,10 @@ for _, inserter in pairs(data.raw.inserter) do
     inserter.starting_distance = 0.85
 
     if inserter.extension_speed > 0.05 then
+        inserter.fast_replaceable_group = 'long-handed-inserter'
         inserter.hand_size = 1.3
+    else
+        inserter.fast_replaceable_group = 'inserter'
     end
 
     if inserter.energy_source.type == 'electric' then
