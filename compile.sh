@@ -7,8 +7,8 @@ NAME_VERSION="${NAME}_${VERSION}"
 
 function compile() {
     git add --all
-    git archive --worktree-attributes $(git stash create) --prefix=$NAME_VERSION/ -o $NAME_VERSION.zip &>/dev/null
-    git gc --prune=now &>/dev/null
+    git archive --worktree-attributes $(git stash create) --prefix=$NAME_VERSION/ -o $NAME_VERSION.zip >&/dev/null
+    git gc --prune=now >&/dev/null
 }
 
 function restore-list() {
@@ -38,7 +38,7 @@ function uninstall() {
 
 function inspect() {
     if [[ ! -f $NAME_VERSION.zip ]]; then compile; fi
-    unzip -o $NAME_VERSION.zip &> /dev/null
+    unzip -o $NAME_VERSION.zip >& /dev/null
 }
 
 function install() {
