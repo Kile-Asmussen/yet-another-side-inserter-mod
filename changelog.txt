@@ -1,5 +1,5 @@
 ---------------------------------------------------------------------------------------------------
-Version: 0.11.0
+Version: 0.10.1
 Date: 2026-09-08
   Bugfixes:
     - Added logic in the data-updates stage that assigns fast-replaceable groups to inserters based on their maximum extension length; all short inserters is in one group, all long inserters is in the other.
