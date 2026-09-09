@@ -79,10 +79,12 @@ end)
 script.on_event(defines.events.on_player_rotated_entity, function(event)
     local player = game.get_player(event.player_index)
     if not player.mod_settings['yasi-8-way-rotation'].value then return end
-
+    
     local inserter = event.entity
     local prototype = yasilib.get_inserter_prototype(inserter)
     if not prototype then return end
+
+    if event.previous_mirroring ~= event.entity.mirrored then return end
 
     local turn = defines.direction.northwest
     if yasilib.add_direction(event.previous_direction, defines.direction.east) == inserter.direction then
