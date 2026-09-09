@@ -20,8 +20,8 @@ if not settings.startup['yasi-vanilla-recipes'].value then
         { type = 'item', name = 'steel-plate', amount = 1 },
     }
 
-end
+end 
 
-data.raw.inserter['fast-inserter'].fast_replaceable_group = 'inserter'
+data.raw.inserter['long-handed-inserter'].next_upgrade = 'fast-inserter'
 
 data.raw.technology['fast-inserter'].prerequisites = { 'automation', 'steel-processing' }
