@@ -1,8 +1,9 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.11.0
 Date: 2026-09-08
-  Features:
+  Bugfixes:
     - Added logic in the data-updates stage that assigns fast-replaceable groups to inserters based on their maximum extension length; all short inserters is in one group, all long inserters is in the other.
+    - Fixed a bug that pasting a mirrored blueprint over an inserter would trigger a 45⁰ rotation.
   Info:
     - Errata: the hand size of long inserters is 1.3, not 1.5.
 ---------------------------------------------------------------------------------------------------

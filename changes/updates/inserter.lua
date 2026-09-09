@@ -13,7 +13,7 @@ for _, inserter in pairs(data.raw.inserter) do
     inserter.insert_position = { 0, 1.2 }
     inserter.starting_distance = 0.85
 
-    if inserter.extension_speed > 0.05 then
+    if inserter.extension_speed >= 0.05 then
         inserter.fast_replaceable_group = 'long-handed-inserter'
         inserter.hand_size = 1.3
 
