@@ -4,30 +4,41 @@ local math2d = require 'math2d'
 local yasilib = require 'scripts.yasilib'
 
 
+local inserter_prototypes = {}
+for _, prototype in pairs(prototypes.entity) do
+    if prototype.type == 'inserter' then
+        inserter_prototypes[prototype.name] = prototype
+    end
+end
+
 script.on_event('yasi-reset-inserter-arm', function(event)
-    yasilib.reset_inserter(yasilib.locate_inserter(event))
+    -- yasilib.reset_inserter(yasilib.locate_inserter(event))
+    local inserter = yasilib.locate_inserter(event)
+    if not inserter then return end
+    yasilib.set_pickup_dropoff(inserter, inserter.direction, util.oppositedirection(inserter.direction), 2)
 end)
 
 script.on_event('yasi-extend-inserter-arm', function(event)
-    yasilib.adjust_inserter_extension(1, yasilib.locate_inserter(event))
+    yasilib.adjust_inserter_extension(yasilib.locate_inserter(event), 1)
 end)
 
 script.on_event('yasi-retract-inserter-arm', function(event)
-    yasilib.adjust_inserter_extension(-1, yasilib.locate_inserter(event))
+    local inserter = yasilib.locate_inserter(event)
+    yasilib.adjust_inserter_extension(yasilib.locate_inserter(event), -1)
 end)
 
 script.on_event('yasi-rotate-inserter-pickup-sunwise', function(event)
     local player = game.get_player(event.player_index)
     local turn = defines.direction.northeast
     if not player.mod_settings['yasi-8-way-rotation'].value then turn = defines.direction.east end
-    yasilib.rotate_inserter_pickup(turn, yasilib.locate_inserter(event))
+    yasilib.rotate_inserter_pickup(yasilib.locate_inserter(event), turn)
 end)
 
 script.on_event('yasi-rotate-inserter-pickup-widdershins', function(event)
     local player = game.get_player(event.player_index)
     local turn = defines.direction.northwest
     if not player.mod_settings['yasi-8-way-rotation'].value then turn = defines.direction.west end
-    yasilib.rotate_inserter_pickup(turn, yasilib.locate_inserter(event))
+    yasilib.rotate_inserter_pickup(yasilib.locate_inserter(event), turn)
 end)
 
 script.on_event('yasi-toggle-paste-inserter-directions', function(event)
@@ -46,13 +57,14 @@ end)
 script.on_event(defines.events.on_pre_entity_settings_pasted, function(event)
     local player = game.get_player(event.player_index)
     if player.mod_settings['yasi-paste-inserter-directions'].value then return end
-    if not yasilib.get_inserter_prototype(event.destination) then return end
+
+    if not yasilib.is_inserter(event.destination) then return end
 
     
     local saved = {
-        drop = yasilib.get_drop_direction(event.destination),
-        pickup = yasilib.get_pickup_direction(event.destination),
-        level = yasilib.get_extension_level(event.destination),
+        yasilib.get_pickup_direction(event.destination),
+        yasilib.get_drop_direction(event.destination),
+        yasilib.get_extension_level(event.destination),
     }
 
     storage.saved = storage.saved or {}
@@ -61,9 +73,18 @@ script.on_event(defines.events.on_pre_entity_settings_pasted, function(event)
 end)
 
 script.on_event(defines.events.on_entity_settings_pasted, function(event)
+    if not yasilib.is_inserter(event.destination) then return end
+
     local player = game.get_player(event.player_index)
-    if player.mod_settings['yasi-paste-inserter-directions'].value then return end
-    if not yasilib.get_inserter_prototype(event.destination) then return end
+    if player.mod_settings['yasi-paste-inserter-directions'].value then
+        yasilib.adjust_inserter_extension(0, event.destination, prototype)
+        
+        if yasilib.is_inserter(event.source) then
+            event.destination.mirroring = event.source.mirroring
+        end
+
+        return
+    end
 
     storage.saved = storage.saved or {}
     storage.saved[event.player_index] = storage.saved[event.player_index] or {}
@@ -71,8 +92,7 @@ script.on_event(defines.events.on_entity_settings_pasted, function(event)
     storage.saved[event.player_index][event.destination.unit_number] = nil
 
     if saved then
-        yasilib.set_pickup(event.destination, saved.pickup, saved.level)
-        yasilib.set_drop(event.destination, saved.drop, saved.level)
+        yasilib.set_pickup_dropoff(event.destination, table.unpack(saved))
     end
 end)
 
@@ -81,41 +101,15 @@ script.on_event(defines.events.on_player_rotated_entity, function(event)
     if not player.mod_settings['yasi-8-way-rotation'].value then return end
     
     local inserter = event.entity
-    local prototype = yasilib.get_inserter_prototype(inserter)
-    if not prototype then return end
+    if not yasilib.is_inserter(inserter) then return end
 
-    if event.previous_mirroring ~= event.entity.mirroring then return end
+    if event.previous_mirroring ~= inserter.mirroring then return end
 
     local turn = defines.direction.northwest
     if yasilib.add_direction(event.previous_direction, defines.direction.east) == inserter.direction then
         turn = defines.direction.northeast
     end
     inserter.direction = event.previous_direction
-    yasilib.rotate_inserter(turn, inserter, prototype)
+    yasilib.rotate_inserter(inserter, turn)
 end)
 
-commands.add_command('yasi-fix-inserters', {'command.yasi-fix-inserters'}, function(command)
-    for _, surface in pairs(game.surfaces) do
-        local inserters = surface.find_entities_filtered{
-            type = 'inserter'
-        }
-
-        for _, inserter in pairs(inserters) do
-            if inserter.valid then
-                yasilib.set_pickup(inserter)
-                yasilib.set_drop(inserter)
-            end
-        end
-
-        inserters = surface.find_entities_filtered{
-            ghost_type = 'inserter'
-        }
-
-        for _, inserter in pairs(inserters) do
-            if inserter.valid then
-                yasilib.set_pickup(inserter)
-                yasilib.set_drop(inserter)
-            end
-        end
-    end
-end)
