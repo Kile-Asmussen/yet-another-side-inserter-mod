@@ -8,6 +8,9 @@ for _, inserter in pairs(data.raw.inserter) do
     
     inserter.allow_custom_vectors = true
     inserter.allow_burner_leech = true
+
+    inserter.filter_count = 4
+    inserter.use_easter_egg = true
     
     inserter.pickup_position = { 0, -1 }
     inserter.insert_position = { 0, 1.2 }
@@ -83,3 +86,7 @@ for i=1,#long_inserters-1 do
     long_inserters[i].next_upgrade = long_inserters[i+1].name
 end
 long_inserters[#long_inserters].next_upgrade = nil
+
+
+for _, loader in pairs(data.raw.loader) do loader.filter_count = 4 end
+for _, loader in pairs(data.raw['1x1-loader']) do loader.filter_count = 4 end

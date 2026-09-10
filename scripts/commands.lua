@@ -10,9 +10,13 @@ commands.add_command('yasi-fix-inserters', {'command.yasi-fix-inserters'}, funct
         = storage.last_invocation['yasi-fix-inserters'][command.player_index] or -delay
 
     if command.tick - storage.last_invocation['yasi-fix-inserters'][command.player_index] > delay then
-        game.print{"command.yasi-fix-inserters-warning"}
+        game.print{"command.yasi-fix-inserters-waring"}
+        storage.last_invocation['yasi-fix-inserters'][command.player_index] = command.tick
         return
     end
+
+    storage.last_invocation['yasi-fix-inserters'][command.player_index] = nil
+        game.print{"command.yasi-fix-inserters-executed"}
 
     if storage.warning then
         for _, surface in pairs(game.surfaces) do
