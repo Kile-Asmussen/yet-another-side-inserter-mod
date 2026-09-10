@@ -88,5 +88,5 @@ end
 long_inserters[#long_inserters].next_upgrade = nil
 
 
-for _, loader in pairs(data.raw.loader) do loader.filter_count = 4 end
-for _, loader in pairs(data.raw['1x1-loader']) do loader.filter_count = 4 end
+for _, loader in pairs(data.raw.loader or {}) do loader.filter_count = 4 end
+for _, loader in pairs(data.raw['1x1-loader'] or {}) do loader.filter_count = 4 end

@@ -1,13 +1,13 @@
 ---------------------------------------------------------------------------------------------------
-Version: 0.10.2
+Version: 0.11.0
 Date: 2026-09-10
+  Features:
+    - Made /yasi-fix-inserters force long-handed inserters to extension 4 and all other inserters to extension 2, conforming with vanilla reach, so it can be used to fix broken builds. Since it is a destructive change, it also now requires the user to run the command twice as confirmation.
+    - Made automatic deduction of canonical direction more resilient, so off-direction inserters get normalized into one of the 8th semi-cardinal directions.
+    - Made automatic deduction of canonical extension level more resilient.
   Bugfixes:
     - Arm settings with long extension are now prevented from being transferred to yellow and burner inserters, circumventing their limitation.
     - When pasting arm direction settings, the 'mirrored' state of the inserter is now also transferred. Inserters have no obvious indication that they are mirrored, and so pasting the destination inserter moved opposite the source inserter if the mirroring states of the two were different.
-  Features:
-    - Made automatic deduction of canonical direction more resilient, so off-direction inserters get normalized into one of the 8th semi-cardinal directions.
-    - Made automatic deduction of canonical extension level more resilient.
-    - Made /yasi-fix-inserters force long-handed inserters to extension 4 and all other inserters to extension 2, conforming with vanilla reach, so it can be used to fix broken builds. Since it is a destructive change, it also now requires the user to run the command twice as confirmation.
   Balancing:
     - Limited all inserters to only 4 filters, as that is what can be displayed on the model in alt mode.
 ---------------------------------------------------------------------------------------------------
