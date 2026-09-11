@@ -98,14 +98,16 @@ end
 
 local memo = {}
 function yasilib.get_max_extension_level(inserter)
-    if memo[inserter.name] then return memo[inserter.name] end
-    local speed = inserter.prototype.get_inserter_extension_speed('normal')
-    if speed < 0.05 then
-        memo[inserter.name] = 2
-        return 2
+    if inserter.type == 'entity-ghost' then
+        if memo[inserter.ghost_name] then return memo[inserter.ghost_name] end
+        local speed = inserter.ghost_prototype.get_inserter_extension_speed('normal')
+        memo[inserter.ghost_name] = speed >= 0.05 and 4 or 2
+        return memo[inserter.ghost_name]
     else
-        memo[inserter.name] = 4
-        return 4
+        if memo[inserter.name] then return memo[inserter.name] end
+        local speed = inserter.prototype.get_inserter_extension_speed('normal')
+        memo[inserter.name] = speed >= 0.05 and 4 or 2
+        return memo[inserter.name]
     end
 end
 
@@ -120,12 +122,14 @@ function yasilib.set_pickup_dropoff(inserter, pickup_direction, dropoff_directio
     if level == nil then
         level = yasilib.get_extension_level(inserter)
     end
-    if level == nil then error() end
 
     pickup_direction = pickup_direction or yasilib.get_pickup_direction(inserter)
     dropoff_direction = dropoff_direction or yasilib.get_dropoff_direction(inserter)
+
+    local max_level = yasilib.get_max_extension_level(inserter)
+    if max_level == nil then error(serpent.line{name=inserter.name,type=inserter.type,ghost_name=inserter.ghost_name,ghost_type=inserter.ghost_type}) end
     
-    level = util.clamp(level, 1, yasilib.get_max_extension_level(inserter))
+    level = util.clamp(level, 1, max_level)
 
     pickup_direction = pickup_direction - pickup_direction % 2
     local pickup = yasilib.offset_from_direction_level(pickup_direction, level, yasilib.pickup_distances)

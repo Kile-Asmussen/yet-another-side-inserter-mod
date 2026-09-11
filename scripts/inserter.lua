@@ -63,7 +63,7 @@ script.on_event(defines.events.on_pre_entity_settings_pasted, function(event)
     
     local saved = {
         yasilib.get_pickup_direction(event.destination),
-        yasilib.get_drop_direction(event.destination),
+        yasilib.get_dropoff_direction(event.destination),
         yasilib.get_extension_level(event.destination),
     }
 

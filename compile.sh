@@ -5,12 +5,14 @@ NAME=$(jq -r '.name' < info.json)
 NAME_VERSION="${NAME}_${VERSION}"
 
 
+function compile-verbose() {
+    git add --all
+    git archive --worktree-attributes $(git stash create) --prefix=$NAME_VERSION/ -o $NAME_VERSION.zip
+    git gc --prune=now
+}
+
 function compile() {
-    (
-        git add --all
-        git archive --worktree-attributes $(git stash create) --prefix=$NAME_VERSION/ -o $NAME_VERSION.zip
-        git gc --prune=now
-    ) >/dev/null 2>/dev/null
+    compile-verbose >/dev/null 2>/dev/null
 }
 
 function restore-list() {
@@ -40,7 +42,7 @@ function uninstall() {
 
 function inspect() {
     if [[ ! -f $NAME_VERSION.zip ]]; then compile; fi
-    unzip -o $NAME_VERSION.zip >& /dev/null
+    ( unzip -o $NAME_VERSION.zip ) >/dev/null 2>/dev/null
 }
 
 function install() {
