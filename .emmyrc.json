@@ -1,0 +1,11 @@
+{
+  "diagnostics": {
+    "disable": [
+      "cast-type-mismatch"
+    ]
+  },
+  "doc": {
+    "privateName": [],
+    "syntax": "md"
+  }
+}

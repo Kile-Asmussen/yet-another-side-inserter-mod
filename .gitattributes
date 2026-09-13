@@ -1,5 +1,7 @@
 *.png binary
 
+.emmyrc.json export-ignore
+.luarc.json export-ignore
 compile.sh export-ignore
 flake.nix export-ignore
 .* export-ignore
