@@ -1,60 +1,85 @@
 
 local yasilib = {}
 
+---@class CustomInputEvent: EventData
+---@field player_index uint32
+---@field input_name string
+---@field cursor_position MapPosition
+---@field cursor_direction defines.direction?
+---@field cursor_display_location GuiLocation
+---@field selected_prototype SelectedPrototypeData?
+---@field element LuaGuiElement?
+---@field in_gui boolean
+---@field name defines.events
+---@field tick MapTick
+
 local util = require 'util'
 local math2d = require 'math2d'
 
 yasilib.number_of_directions = table_size(defines.direction)
 
-if not defines.direction then error("defines.direction not found") end
-if not table_size(defines.direction) then error("defines.direction has no table_size") end
-
+---@param direction defines.direction
+---@param turn defines.direction
+---@return defines.direction
 function yasilib.add_direction(direction, turn)
-    return (direction + turn) % yasilib.number_of_directions
+    return ((direction + turn) % yasilib.number_of_directions) --[[@as defines.direction]]
 end
 
+---@param direction defines.direction
+---@return boolean
 function yasilib.is_orthogonal(direction)
     return direction % defines.direction.east == 0
 end
 
+---@param v1 Vector.struct
+---@param v2 Vector.struct
+---@return number
 function yasilib.dot_product(v1, v2)
     return v1.x * v2.x + v1.y * v2.y
 end
+
+
+---@alias ExtensionLevel (1|2|3|4)
  
 yasilib.pickup_distances = {
+    ---@type {[ExtensionLevel]:number}
     orthogonal = { 1, 1, 2, 2 },
+    ---@type {[ExtensionLevel]:number}
     diagonal = { 1.1, 1.1, 2.2, 2.2 },
 }
 
 yasilib.dropoff_distances = {
+    ---@type {[ExtensionLevel]:number}
     orthogonal = { 0.7, 1.2, 1.7, 2.2 },
+    ---@type {[ExtensionLevel]:number}
     diagonal = { 0.8, 1.3, 1.9, 2.4 },
 }
 
+---@type table<defines.direction, Vector.struct>
 yasilib.normalised_direction_vectors = {}
 
 for _, dir in pairs{ 'north', 'northeast', 'east', 'southeast', 'south', 'southwest', 'west', 'northwest' } do
-    dir = defines.direction[dir]
-    yasilib.normalised_direction_vectors[dir] = math2d.position.get_normalised(util.direction_vectors[dir])
+    dir = defines.direction[dir] --[[@as any]]
+    yasilib.normalised_direction_vectors[dir] = math2d.position.get_normalised(util.direction_vectors[dir]) --[[@as Vector.struct]]
 end
 
-yasilib.direction_names = { }
-for i=1,31 do yasilib.direction_names[i] = '' end
-for name, direction in pairs(defines.direction) do
-    yasilib.direction_names[direction] = name
-end
-
-
+---@param inserter LuaEntity
+---@return Vector.struct
 function yasilib.get_drop_offset(inserter)
-    return math2d.position.subtract(inserter.drop_position, inserter.position)
+    return math2d.position.subtract(inserter.drop_position, inserter.position) --[[@as Vector.struct]]
 end
 
+---@param inserter LuaEntity
+---@return Vector.struct
 function yasilib.get_pickup_offset(inserter)
-    return math2d.position.subtract(inserter.pickup_position, inserter.position)
+    return math2d.position.subtract(inserter.pickup_position, inserter.position) --[[@as Vector.struct]]
 end
 
+--- cSpell:ignore exsin
 local exsin_22_5 = 1 - math.sin(3 * math.pi / 8)
 
+---@param vector Vector.struct
+---@return defines.direction
 function yasilib.vector_to_direction(vector)
     local length = math.sqrt(yasilib.dot_product(vector, vector))
     local min = length - exsin_22_5
@@ -63,20 +88,30 @@ function yasilib.vector_to_direction(vector)
         local proj = yasilib.dot_product(vector, normal)
         if min < proj and proj < max then return dir end
     end
+    return nil --[[@as defines.direction]]
 end
 
+---@param inserter LuaEntity
+---@return defines.direction
 function yasilib.get_pickup_direction(inserter)
     return yasilib.vector_to_direction(yasilib.get_pickup_offset(inserter))
         or inserter.direction
 end
 
+---@param inserter LuaEntity
+---@return defines.direction
 function yasilib.get_dropoff_direction(inserter)
     return yasilib.vector_to_direction(yasilib.get_drop_offset(inserter))
         or util.oppositedirection(inserter.direction)
 end
 
+---@generic N: number
+---@param number number
+---@param points {[N]:number}
+---@return N
 function yasilib.arg_min_diff(number, points)
     for i=1, #points-1 do
+        ---@diagnostic disable-next-line: need-check-nil
         local mid = (points[i+1] - points[i]) / 2 + points[i]
         if number < mid then return i end
     end
@@ -84,6 +119,8 @@ function yasilib.arg_min_diff(number, points)
 end
 
 
+---@param inserter LuaEntity
+---@return ExtensionLevel
 function yasilib.get_extension_level(inserter)
     local offset = yasilib.get_drop_offset(inserter)
     local direction = yasilib.vector_to_direction(offset)
@@ -96,10 +133,15 @@ function yasilib.get_extension_level(inserter)
     end
 end
 
+---@type table<string, ExtensionLevel>
 local memo = {}
+
+---@param inserter LuaEntity
+---@return ExtensionLevel
 function yasilib.get_max_extension_level(inserter)
     if inserter.type == 'entity-ghost' then
         if memo[inserter.ghost_name] then return memo[inserter.ghost_name] end
+        ---@cast inserter.ghost_prototype LuaEntityPrototype
         local speed = inserter.ghost_prototype.get_inserter_extension_speed('normal')
         memo[inserter.ghost_name] = speed >= 0.05 and 4 or 2
         return memo[inserter.ghost_name]
@@ -170,15 +212,16 @@ end
 
 function yasilib.reset_inserter(inserter)
     if not inserter then return end
-    yasilib.set_pickup_dropoff(inserter, inserter.direction, utils.oppositedirection(inserter.direction), 2)
+    yasilib.set_pickup_dropoff(inserter, inserter.direction, util.oppositedirection(inserter.direction), 2)
 end
 
 function yasilib.is_inserter(inserter)
     return inserter and (inserter.type == 'inserter' or inserter.type == 'entity-ghost' and inserter.ghost_type == 'inserter')
 end
 
+---@param event CustomInputEvent
 function yasilib.locate_inserter(event)
-    local player = game.get_player(event.player_index)
+    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
     if yasilib.is_inserter(player.selected) then return player.selected end
 end
 

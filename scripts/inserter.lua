@@ -4,12 +4,6 @@ local math2d = require 'math2d'
 local yasilib = require 'scripts.yasilib'
 
 
-local inserter_prototypes = {}
-for _, prototype in pairs(prototypes.entity) do
-    if prototype.type == 'inserter' then
-        inserter_prototypes[prototype.name] = prototype
-    end
-end
 
 script.on_event('yasi-reset-inserter-arm', function(event)
     -- yasilib.reset_inserter(yasilib.locate_inserter(event))
@@ -28,34 +22,38 @@ script.on_event('yasi-retract-inserter-arm', function(event)
 end)
 
 script.on_event('yasi-rotate-inserter-pickup-sunwise', function(event)
-    local player = game.get_player(event.player_index)
-    local turn = defines.direction.northeast
+    ---@cast event CustomInputEvent
+    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+    local turn = defines.direction.northeast --[[@as defines.direction]]
     if not player.mod_settings['yasi-8-way-rotation'].value then turn = defines.direction.east end
     yasilib.rotate_inserter_pickup(yasilib.locate_inserter(event), turn)
 end)
 
 script.on_event('yasi-rotate-inserter-pickup-widdershins', function(event)
-    local player = game.get_player(event.player_index)
-    local turn = defines.direction.northwest
+    ---@cast event CustomInputEvent
+    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+    local turn = defines.direction.northwest --[[@as defines.direction]]
     if not player.mod_settings['yasi-8-way-rotation'].value then turn = defines.direction.west end
     yasilib.rotate_inserter_pickup(yasilib.locate_inserter(event), turn)
 end)
 
 script.on_event('yasi-toggle-paste-inserter-directions', function(event)
-    local player = game.get_player(event.player_index)
+    ---@cast event CustomInputEvent
+    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+
     player.mod_settings['yasi-paste-inserter-directions'] = { value = not player.mod_settings['yasi-paste-inserter-directions'].value }
 
     if player.mod_settings['yasi-paste-inserter-directions-notify'].value then
         if player.mod_settings['yasi-paste-inserter-directions'].value then
-            game.print{'mod-setting-change.yasi-paster-inserter-directions-on'}
+            game.print {'mod-setting-change.yasi-paster-inserter-directions-on'}
         else
-            game.print{'mod-setting-change.yasi-paster-inserter-directions-off'}
+            game.print {'mod-setting-change.yasi-paster-inserter-directions-off'}
         end
     end
 end)
 
 script.on_event(defines.events.on_pre_entity_settings_pasted, function(event)
-    local player = game.get_player(event.player_index)
+    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
     if player.mod_settings['yasi-paste-inserter-directions'].value then return end
 
     if not yasilib.is_inserter(event.destination) then return end
@@ -75,7 +73,7 @@ end)
 script.on_event(defines.events.on_entity_settings_pasted, function(event)
     if not yasilib.is_inserter(event.destination) then return end
 
-    local player = game.get_player(event.player_index)
+    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
     if player.mod_settings['yasi-paste-inserter-directions'].value then
         
         yasilib.adjust_inserter_extension(event.destination, 0)
@@ -98,7 +96,7 @@ script.on_event(defines.events.on_entity_settings_pasted, function(event)
 end)
 
 script.on_event(defines.events.on_player_rotated_entity, function(event)
-    local player = game.get_player(event.player_index)
+    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
     if not player.mod_settings['yasi-8-way-rotation'].value then return end
     
     local inserter = event.entity
@@ -106,7 +104,7 @@ script.on_event(defines.events.on_player_rotated_entity, function(event)
 
     if event.previous_mirroring ~= inserter.mirroring then return end
 
-    local turn = defines.direction.northwest
+    local turn = defines.direction.northwest --[[@as defines.direction]]
     if yasilib.add_direction(event.previous_direction, defines.direction.east) == inserter.direction then
         turn = defines.direction.northeast
     end

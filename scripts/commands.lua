@@ -1,5 +1,14 @@
 
+local yasilib = require 'scripts.yasilib'
+
 local delay = 3 * second
+
+local inserter_prototypes = {}
+for _, prototype in pairs(prototypes.entity) do
+    if prototype.type == 'inserter' then
+        inserter_prototypes[prototype.name] = prototype
+    end
+end
 
 commands.add_command('yasi-fix-inserters', {'command.yasi-fix-inserters'}, function(command)
     storage.last_invocation = storage.last_invocation or {}
@@ -21,7 +30,7 @@ commands.add_command('yasi-fix-inserters', {'command.yasi-fix-inserters'}, funct
     if storage.warning then
         for _, surface in pairs(game.surfaces) do
             for _, prototype in pairs(inserter_prototypes) do
-                inserters = surface.find_entities_filtered{
+                local inserters = surface.find_entities_filtered{
                     type = 'inserter', name = prototype.name
                 }
 

@@ -9,7 +9,7 @@
     },
     "workspace": {
         "library": [
-            "/home/qeela/.config/Code/User/workspaceStorage/4fc48d78ac86dccc427d9e1aad3c0c58/justarandomgeek.factoriomod-debug/emmylua/factorio/library",
+            "/home/qeela/.config/Code/User/workspaceStorage/161cd4521f4294b129349ef79e067ebe/justarandomgeek.factoriomod-debug/emmylua/factorio/library",
             {
                 "path": "/usr/share/factorio",
                 "ignoreDir": [
@@ -38,6 +38,12 @@
                     "*/menu-simulations/**"
                 ]
             }
+        ],
+        "ignoreGlobs": [
+            "*.direnv*"
+        ],
+        "ignoreDir": [
+            "./.direnv"
         ],
         "moduleMap": [
             {

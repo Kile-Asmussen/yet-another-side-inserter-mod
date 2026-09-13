@@ -20,9 +20,9 @@ for _, inserter in pairs(data.raw.inserter) do
 
         local upkeep = util.parse_energy(inserter.energy_source.drain or '0W') * second * time -- J
 
-        local rotate = util.parse_energy(inserter.energy_per_rotation) * rotations -- J
+        local rotate = util.parse_energy(inserter.energy_per_rotation or '0J') * rotations -- J
 
-        inserter.energy_source.buffer_size = 
+        inserter.energy_source.buffer_capacity = 
             (upkeep + rotate) / 1000 .. 'kJ'
     end
 
@@ -61,12 +61,12 @@ local energy_source_hierarchy = {
 }
 
 local function inserter_ordering(ins1, ins2)
-    local ordering1 = data.raw.item[ins1.name] and data.raw.item[ins1.name].ordering
-                    or data.raw.recipe[ins1.name] and data.raw.recipe[ins1.name].ordering
+    local ordering1 = data.raw.item[ins1.name] and data.raw.item[ins1.name].order
+                    or data.raw.recipe[ins1.name] and data.raw.recipe[ins1.name].order
                     or ''
     
-    local ordering2 = data.raw.item[ins2.name] and data.raw.item[ins2.name].ordering
-                or data.raw.recipe[ins2.name] and data.raw.recipe[ins2.name].ordering
+    local ordering2 = data.raw.item[ins2.name] and data.raw.item[ins2.name].order
+                or data.raw.recipe[ins2.name] and data.raw.recipe[ins2.name].order
                 or ''
 
     return ins1.rotation_speed < ins2.rotation_speed
