@@ -26,7 +26,6 @@ for _, inserter in pairs(data.raw.inserter) do
             (upkeep + rotate) / 1000 .. 'kJ'
     end
 
-
     if inserter.fast_replaceable_group ~= 'inserter' and inserter.fast_replaceable_group ~= 'long-handed-inserter' then
         goto continue
     end

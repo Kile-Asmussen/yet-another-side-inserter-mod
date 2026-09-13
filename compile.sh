@@ -5,16 +5,10 @@ NAME=$(jq -r '.name' < info.json)
 NAME_VERSION="${NAME}_${VERSION}"
 
 
-function compile-verbose() {
-    git add --all
-    git archive --worktree-attributes $(git stash create) --prefix=$NAME_VERSION/ -o $NAME_VERSION.zip
-    git gc --prune=now
-}
-
 function compile() {
-    local TMP=$(mktemp)
-    compile-verbose 2>&1 >"$TMP"
-    cat $TMP
+    git add --all
+    git archive $(git stash create)  --worktree-attributes --prefix=$NAME_VERSION/ -o $NAME_VERSION.zip
+    git gc --prune=now 2>/dev/null
 }
 
 function restore-list() {
