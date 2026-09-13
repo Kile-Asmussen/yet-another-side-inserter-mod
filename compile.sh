@@ -12,7 +12,9 @@ function compile-verbose() {
 }
 
 function compile() {
-    compile-verbose >/dev/null 2>/dev/null
+    local TMP=$(mktemp)
+    compile-verbose 2>&1 >"$TMP"
+    cat $TMP
 }
 
 function restore-list() {

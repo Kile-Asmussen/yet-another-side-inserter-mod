@@ -77,7 +77,8 @@ script.on_event(defines.events.on_entity_settings_pasted, function(event)
 
     local player = game.get_player(event.player_index)
     if player.mod_settings['yasi-paste-inserter-directions'].value then
-        yasilib.adjust_inserter_extension(0, event.destination, prototype)
+        
+        yasilib.adjust_inserter_extension(event.destination, 0)
         
         if yasilib.is_inserter(event.source) then
             event.destination.mirroring = event.source.mirroring

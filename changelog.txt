@@ -1,8 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.11.2
+Date: 2026-09-11
+  Bugfixes:
+    - Fixed a crash in the settings paste function, due to a missed argument order refactoring.
+    - Fixed a bug in the upgrade logic that made bulk inserters upgrade to fast inserters.
+---------------------------------------------------------------------------------------------------
 Version: 0.11.1
 Date: 2026-09-11
   Bugfixes:
-    - Fixed a bug in the paste function, due to a partial rename refactoring.
+    - Fixed a crash in the settings paste hook, due to a missed rename refactoring.
 ---------------------------------------------------------------------------------------------------
 Version: 0.11.0
 Date: 2026-09-10

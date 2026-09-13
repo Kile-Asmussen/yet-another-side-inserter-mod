@@ -5,12 +5,31 @@ local short_inserters = {}
 local long_inserters = {}
 
 for _, inserter in pairs(data.raw.inserter) do
-    
+
     inserter.allow_custom_vectors = true
     inserter.allow_burner_leech = true
 
     inserter.filter_count = 4
     inserter.use_easter_egg = true
+
+    if inserter.energy_source.type == 'electric' then
+
+        local rotations = 5
+        local frequency = inserter.rotation_speed * second -- Hz
+        local time = rotations / frequency
+
+        local upkeep = util.parse_energy(inserter.energy_source.drain or '0W') * second * time -- J
+
+        local rotate = util.parse_energy(inserter.energy_per_rotation) * rotations -- J
+
+        inserter.energy_source.buffer_size = 
+            (upkeep + rotate) / 1000 .. 'kJ'
+    end
+
+
+    if inserter.fast_replaceable_group ~= 'inserter' and inserter.fast_replaceable_group ~= 'long-handed-inserter' then
+        goto continue
+    end
     
     inserter.pickup_position = { 0, -1 }
     inserter.insert_position = { 0, 1.2 }
@@ -31,19 +50,7 @@ for _, inserter in pairs(data.raw.inserter) do
         end
     end
 
-    if inserter.energy_source.type == 'electric' then
-
-        local rotations = 5
-        local frequency = inserter.rotation_speed * second -- Hz
-        local time = rotations / frequency
-
-        local upkeep = util.parse_energy(inserter.energy_source.drain or '0W') * second * time -- J
-
-        local rotate = util.parse_energy(inserter.energy_per_rotation) * rotations -- J
-
-        inserter.energy_source.buffer_size = 
-            (upkeep + rotate) / 1000 .. 'kJ'
-    end
+    ::continue::
 end
 
 local energy_source_hierarchy = {
@@ -65,6 +72,7 @@ local function inserter_ordering(ins1, ins2)
 
     return ins1.rotation_speed < ins2.rotation_speed
         or ins1.extension_speed < ins2.extension_speed
+        or (not ins1.bulk and ins2.bulk)
         or energy_source_hierarchy[ins1.energy_source.type] < energy_source_hierarchy[ins2.energy_source.type]
         or ordering1 < ordering2
 end
