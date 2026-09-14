@@ -11,6 +11,8 @@ for _, prototype in pairs(prototypes.entity) do
 end
 
 commands.add_command('yasi-fix-inserters', {'command.yasi-fix-inserters'}, function(command)
+ 
+    local player = game.get_player(command.player_index --[[@as uint32]]) --[[@as LuaPlayer]]
     storage.last_invocation = storage.last_invocation or {}
 
     storage.last_invocation['yasi-fix-inserters'] = storage.last_invocation['yasi-fix-inserters'] or {}
@@ -19,7 +21,7 @@ commands.add_command('yasi-fix-inserters', {'command.yasi-fix-inserters'}, funct
         = storage.last_invocation['yasi-fix-inserters'][command.player_index] or -delay
 
     if command.tick - storage.last_invocation['yasi-fix-inserters'][command.player_index] > delay then
-        game.print{"command.yasi-fix-inserters-waring"}
+        player.print{"command.yasi-fix-inserters-waring"}
         storage.last_invocation['yasi-fix-inserters'][command.player_index] = command.tick
         return
     end

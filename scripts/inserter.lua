@@ -45,9 +45,9 @@ script.on_event('yasi-toggle-paste-inserter-directions', function(event)
 
     if player.mod_settings['yasi-paste-inserter-directions-notify'].value then
         if player.mod_settings['yasi-paste-inserter-directions'].value then
-            game.print {'mod-setting-change.yasi-paster-inserter-directions-on'}
+            player.print{'mod-setting-change.yasi-paster-inserter-directions-on'}
         else
-            game.print {'mod-setting-change.yasi-paster-inserter-directions-off'}
+            player.print{'mod-setting-change.yasi-paster-inserter-directions-off'}
         end
     end
 end)
