@@ -39,12 +39,6 @@
                 ]
             }
         ],
-        "ignoreGlobs": [
-            "*.direnv*"
-        ],
-        "ignoreDir": [
-            "./.direnv"
-        ],
         "moduleMap": [
             {
                 "pattern": "^__(.*)__(.*)$",
